@@ -45,6 +45,40 @@ class FireflyInstance():
             "Notion-Version": "2022-02-22"
         }
 
+    def check_for_overdue_tasks(self):
+        queryUrl = f"https://api.notion.com/v1/databases/{self.database_id}/query"
+
+        queryData = {
+            "filter": {
+                "property": "Status",
+                "status": {
+                    "equals": "To Do"
+                }
+            }
+        }
+        data = json.dumps(queryData)
+
+        res = requests.request("POST", queryUrl, headers=self.notion_headers, data=data)
+
+        print(res.json())
+
+        for task in res.json()['results']:
+            if task['properties']['Due Date']['date']['start'] < datetime.now().strftime("%Y-%m-%d"):
+                task['properties']['Status']['status']['name'] = "Overdue"
+                updateUrl = f"https://api.notion.com/v1/pages/{task['id']}"
+                updateData = {
+                    "properties": {
+                        "Status": {
+                            "status": {
+                                "name": "Overdue",
+                            }
+                        }
+                    }
+                }
+                data = json.dumps(updateData)
+
+                res = requests.request("PATCH", updateUrl, headers=self.notion_headers, data=data)
+
     def add_new_todo_tasks_to_notion(self, database_id: str, headers: dict, data: dict):
         createUrl = 'https://api.notion.com/v1/pages'
 
