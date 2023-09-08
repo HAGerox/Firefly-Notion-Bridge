@@ -1,0 +1,6 @@
+__pycache__/
+.vscode/
+.test*.py
+test.html
+test.json
+.env
