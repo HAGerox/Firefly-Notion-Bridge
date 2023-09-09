@@ -18,6 +18,7 @@ class FireflyUser():
             self.secret = os.getenv('SECRET')            
             self.notion_token = os.getenv('NOTION_TOKEN')            
             self.database_id = os.getenv('DATABASE_ID')
+            self.app_id = "Firefly-Notion-Bridge"
         else:
             self.get_user_auth_info()
 
@@ -59,7 +60,7 @@ class FireflyUser():
 
                         secret_flag = False
                         while not secret_flag:
-                            non_parsed_redirect = f"{self.host}/login/api/gettoken?ffauth_device_id={self.device_id}&ffauth_secret&device_id={self.device_id}&app_id={self.device_id}"
+                            non_parsed_redirect = f"{self.host}/login/api/gettoken?ffauth_device_id={self.device_id}&ffauth_secret&device_id={self.device_id}&app_id={self.app_id}"
                             redirect = urllib.parse.quote(non_parsed_redirect, safe='~()*!\'')
                             authenticate_url = f"{self.host}/login/login.aspx?prelogin={redirect}"
                             
