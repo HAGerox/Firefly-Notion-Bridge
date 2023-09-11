@@ -11,6 +11,7 @@ class FireflyUser():
     def __init__(self) -> None:
         load_dotenv()
 
+        self.app_id = "Firefly-Notion-Bridge"
         if os.getenv('SCHOOL_CODE') and os.getenv('HOST') and os.getenv('DEVICE_ID') and os.getenv('SECRET') and os.getenv('NOTION_TOKEN') and os.getenv('DATABASE_ID'):
             self.school_code = os.getenv('SCHOOL_CODE')            
             self.host = os.getenv('HOST')
@@ -18,9 +19,9 @@ class FireflyUser():
             self.secret = os.getenv('SECRET')            
             self.notion_token = os.getenv('NOTION_TOKEN')            
             self.database_id = os.getenv('DATABASE_ID')
-            self.app_id = "Firefly-Notion-Bridge"
         else:
             self.get_user_auth_info()
+        
 
     def get_user_auth_info(self):
         # .env file is not complete, get entirely new credentials
@@ -35,6 +36,7 @@ class FireflyUser():
                 while not host_flag:
                     print("Input your school code, it can be found under account settings while logged into firefly")
                     school_code_input = input().upper()
+                    #TODO remove unnecessary user input
                     print(f"Is this school code correct? ({school_code_input}) The school code should be capitalised. ([Y]es/[N]o)")
                     if input().upper() == "Y":
                         self.school_code = school_code_input
@@ -55,6 +57,7 @@ class FireflyUser():
                             print(self.host)
                             host_flag = True
 
+                        #TODO maybe remove input of device_id, use uuid?
                         print("Input a device id, this can be anything you want")
                         self.device_id = input()
 
@@ -64,6 +67,8 @@ class FireflyUser():
                             redirect = urllib.parse.quote(non_parsed_redirect, safe='~()*!\'')
                             authenticate_url = f"{self.host}/login/login.aspx?prelogin={redirect}"
                             
+                            #TODO automate and remove unecissary user input
+
                             print("A web page will open when you press enter, if it does not open, open the following link in your browser:")
                             input()
                             print(authenticate_url)
